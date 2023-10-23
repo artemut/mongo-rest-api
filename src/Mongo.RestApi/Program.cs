@@ -1,4 +1,5 @@
 using Microsoft.OpenApi.Models;
+using Mongo.RestApi.Database;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
+builder.Services.AddSingleton<IDatabaseProvider, DatabaseProvider>();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Mongo REST Api", Version = "v1" });
