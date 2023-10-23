@@ -11,6 +11,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 });
 builder.Services.AddSingleton<IDatabaseProvider, DatabaseProvider>();
 builder.Services.AddSingleton<IFinder, Finder>();
+builder.Services.AddSingleton<IInserter, Inserter>();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Mongo REST Api", Version = "v1" });
