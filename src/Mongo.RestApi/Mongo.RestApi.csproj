@@ -13,4 +13,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="Mongo.RestApi.IntegrationTests" />
+  </ItemGroup>
+
 </Project>
