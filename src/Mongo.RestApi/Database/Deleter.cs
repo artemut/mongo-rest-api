@@ -1,8 +1,9 @@
 ﻿using Mongo.RestApi.ApiModels;
+using Mongo.RestApi.ErrorHandling;
+using Mongo.RestApi.Extensions;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Text.Json;
-using Mongo.RestApi.Extensions;
 
 namespace Mongo.RestApi.Database
 {
@@ -29,9 +30,9 @@ namespace Mongo.RestApi.Database
             var writeErrors = result.GetWriteErrors();
             if (writeErrors != null && writeErrors.Any())
             {
-                throw new Exception("Command result indicates error:" +
-                                    $"{Environment.NewLine}" +
-                                    $"{JsonSerializer.Serialize(writeErrors)}");
+                throw new CommandException("Command result indicates error:" +
+                                           $"{Environment.NewLine}" +
+                                           $"{JsonSerializer.Serialize(writeErrors)}");
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using Mongo.RestApi.ApiModels;
+using Mongo.RestApi.ErrorHandling;
+using Mongo.RestApi.Extensions;
 using MongoDB.Bson;
-using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using System.Text.Json;
 
@@ -35,7 +36,7 @@ namespace Mongo.RestApi.Database
                 var result = await database.RunCommandAsync(command, cancellationToken: token);
                 if (result["ok"].ToInt32() != 1)
                 {
-                    throw new Exception($"Command result indicates error. Batch number: {batchNumber}");
+                    throw new CommandException($"Command result indicates error. Batch number: {batchNumber}");
                 }
 
                 var cursor = result["cursor"];
@@ -74,9 +75,7 @@ namespace Mongo.RestApi.Database
 
         private static IEnumerable<dynamic> ExtractDocuments(BsonValue cursor, string batchKey)
         {
-            return cursor[batchKey]
-                .AsBsonArray
-                .Select(x => BsonSerializer.Deserialize<dynamic>(x.AsBsonDocument));
+            return cursor[batchKey].AsBsonArray.Extract();
         }
     }
 }

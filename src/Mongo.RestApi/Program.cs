@@ -1,14 +1,19 @@
 using Microsoft.OpenApi.Models;
 using Mongo.RestApi.Database;
+using Mongo.RestApi.ErrorHandling;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRouting();
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-});
+builder.Services.AddControllers(options =>
+    {
+        options.Filters.Add<CommandExceptionFilter>();
+    })
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 builder.Services.AddSingleton<IDatabaseProvider, DatabaseProvider>();
 builder.Services.AddSingleton<IFinder, Finder>();
 builder.Services.AddSingleton<IInserter, Inserter>();
