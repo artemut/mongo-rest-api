@@ -17,12 +17,13 @@ namespace Mongo.RestApi.Database
         }
 
         public async Task<List<dynamic>> RunAsync(
+            string connectionName,
             string databaseName,
             string collectionName,
             FindModel model,
             CancellationToken token)
         {
-            var database = _databaseProvider.GetDatabase(databaseName);
+            var database = _databaseProvider.GetDatabase(connectionName, databaseName);
 
             var documents = new List<dynamic>();
             var batchNumber = 0;

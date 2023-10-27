@@ -15,10 +15,15 @@ public class FindController : ControllerBase
     }
 
     [HttpPost]
-    [Route("{databaseName}/{collectionName}/find")]
-    public async Task<IActionResult> FindAsync(string databaseName, string collectionName, FindModel model)
+    [Route("{connectionName}/{databaseName}/{collectionName}/find")]
+    public async Task<IActionResult> FindAsync(
+        string connectionName,
+        string databaseName,
+        string collectionName,
+        FindModel model)
     {
         var results = await _finder.RunAsync(
+            connectionName,
             databaseName,
             collectionName,
             model,

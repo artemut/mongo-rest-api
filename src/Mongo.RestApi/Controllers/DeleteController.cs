@@ -15,10 +15,15 @@ public class DeleteController : ControllerBase
     }
 
     [HttpPost]
-    [Route("{databaseName}/{collectionName}/delete")]
-    public async Task<IActionResult> DeleteAsync(string databaseName, string collectionName, DeleteModel model)
+    [Route("{connectionName}/{databaseName}/{collectionName}/delete")]
+    public async Task<IActionResult> DeleteAsync(
+        string connectionName,
+        string databaseName,
+        string collectionName,
+        DeleteModel model)
     {
         await _deleter.RunAsync(
+            connectionName,
             databaseName,
             collectionName,
             model,

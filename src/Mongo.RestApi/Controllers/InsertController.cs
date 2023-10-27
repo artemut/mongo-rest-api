@@ -15,10 +15,15 @@ public class InsertController : ControllerBase
     }
 
     [HttpPost]
-    [Route("{databaseName}/{collectionName}/insert")]
-    public async Task<IActionResult> InsertAsync(string databaseName, string collectionName, InsertModel model)
+    [Route("{connectionName}/{databaseName}/{collectionName}/insert")]
+    public async Task<IActionResult> InsertAsync(
+        string connectionName,
+        string databaseName,
+        string collectionName,
+        InsertModel model)
     {
         await _inserter.RunAsync(
+            connectionName,
             databaseName,
             collectionName,
             model,

@@ -17,12 +17,13 @@ namespace Mongo.RestApi.Database
         }
 
         public async Task RunAsync(
+            string connectionName,
             string databaseName,
             string collectionName,
             DeleteModel model,
             CancellationToken token)
         {
-            var database = _databaseProvider.GetDatabase(databaseName);
+            var database = _databaseProvider.GetDatabase(connectionName, databaseName);
 
             var command = BuildCommand(collectionName, model);
             var result = await database.RunCommandAsync(command, cancellationToken: token);

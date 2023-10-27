@@ -23,7 +23,7 @@ namespace Mongo.RestApi.IntegrationTests
         {
             var body = new { filter = new { } };
 
-            var response = await client.PostAsync($"/{databaseName}/{collectionName}/find", body);
+            var response = await client.PostAsync(UrlBuilder.Build(collectionName, "find"), body);
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var array = await response.ReadAsAsync<dynamic[]>();
@@ -39,7 +39,7 @@ namespace Mongo.RestApi.IntegrationTests
             await _mongoHelper.InsertManyAsync(Constants.DatabaseName, collectionName, existingItems);
             var body = new { filter = new { not_existing_property = "foo" } };
 
-            var response = await client.PostAsync($"/{Constants.DatabaseName}/{collectionName}/find", body);
+            var response = await client.PostAsync(UrlBuilder.Build(collectionName, "find"), body);
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var array = await response.ReadAsAsync<DataModel[]>();
@@ -55,7 +55,7 @@ namespace Mongo.RestApi.IntegrationTests
             await _mongoHelper.InsertManyAsync(Constants.DatabaseName, collectionName, existingItems);
             var body = new { filter = new { } };
 
-            var response = await client.PostAsync($"/{Constants.DatabaseName}/{collectionName}/find", body);
+            var response = await client.PostAsync(UrlBuilder.Build(collectionName, "find"), body);
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var array = await response.ReadAsAsync<DataModel[]>();
@@ -74,7 +74,7 @@ namespace Mongo.RestApi.IntegrationTests
             var id1 = expectedItems[1]._id;
             var body = $@"{{ ""filter"": {{ ""$or"": [{{ ""_id"": {id0} }},{{ ""_id"": {id1} }}] }} }}";
 
-            var response = await client.PostAsync($"/{Constants.DatabaseName}/{collectionName}/find", body);
+            var response = await client.PostAsync(UrlBuilder.Build(collectionName, "find"), body);
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var array = await response.ReadAsAsync<DataModel[]>();
@@ -96,7 +96,7 @@ namespace Mongo.RestApi.IntegrationTests
                 : existingItems.OrderByDescending(x => x.Name).ToArray();
             var body = new { filter = new { }, sort = new { Name = ascending ? 1 : -1 } };
 
-            var response = await client.PostAsync($"/{Constants.DatabaseName}/{collectionName}/find", body);
+            var response = await client.PostAsync(UrlBuilder.Build(collectionName, "find"), body);
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var array = await response.ReadAsAsync<DataModel[]>();
@@ -112,7 +112,7 @@ namespace Mongo.RestApi.IntegrationTests
             await _mongoHelper.InsertManyAsync(Constants.DatabaseName, collectionName, existingItems);
             var body = new { filter = new { }, projection = new { Name = 1 } };
 
-            var response = await client.PostAsync($"/{Constants.DatabaseName}/{collectionName}/find", body);
+            var response = await client.PostAsync(UrlBuilder.Build(collectionName, "find"), body);
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var array = await response.ReadAsAsync<DataModel[]>();
@@ -130,11 +130,24 @@ namespace Mongo.RestApi.IntegrationTests
             var expectedItems = existingItems.Skip(1).Take(1).ToArray();
             var body = new { filter = new { }, skip = 1, limit = 1 };
 
-            var response = await client.PostAsync($"/{Constants.DatabaseName}/{collectionName}/find", body);
+            var response = await client.PostAsync(UrlBuilder.Build(collectionName, "find"), body);
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var array = await response.ReadAsAsync<DataModel[]>();
             array.Should().BeEquivalentTo(expectedItems);
+        }
+
+        [Theory, ModelCustomization]
+        public async Task Find_Should_Return400_If_ConnectionNameIsUnknown(
+            string connectionName,
+            string collectionName,
+            HttpClient client)
+        {
+            var body = new { filter = new { } };
+
+            var response = await client.PostAsync($"{connectionName}/{Constants.DatabaseName}/{collectionName}/find", body);
+
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
         public void Dispose()

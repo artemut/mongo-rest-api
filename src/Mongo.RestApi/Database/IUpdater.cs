@@ -5,6 +5,7 @@ namespace Mongo.RestApi.Database
     public interface IUpdater
     {
         Task RunAsync(
+            string connectionName,
             string databaseName,
             string collectionName,
             UpdateModel model,

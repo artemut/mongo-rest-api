@@ -15,10 +15,15 @@ public class UpdateController : ControllerBase
     }
 
     [HttpPost]
-    [Route("{databaseName}/{collectionName}/update")]
-    public async Task<IActionResult> UpdateAsync(string databaseName, string collectionName, UpdateModel model)
+    [Route("{connectionName}/{databaseName}/{collectionName}/update")]
+    public async Task<IActionResult> UpdateAsync(
+        string connectionName,
+        string databaseName,
+        string collectionName,
+        UpdateModel model)
     {
         await _updater.RunAsync(
+            connectionName,
             databaseName,
             collectionName,
             model,

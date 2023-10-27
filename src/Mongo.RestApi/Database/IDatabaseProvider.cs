@@ -4,6 +4,6 @@ namespace Mongo.RestApi.Database
 {
     public interface IDatabaseProvider
     {
-        IMongoDatabase GetDatabase(string databaseName);
+        IMongoDatabase GetDatabase(string connectionName, string databaseName);
     }
 }

@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 builder.Services.AddRouting();
 builder.Services.AddControllers(options =>
     {
-        options.Filters.Add<CommandExceptionFilter>();
+        options.Filters.Add<CustomExceptionFilter>();
     })
     .AddJsonOptions(options =>
     {

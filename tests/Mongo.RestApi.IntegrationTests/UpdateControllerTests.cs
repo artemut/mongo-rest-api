@@ -29,7 +29,7 @@ namespace Mongo.RestApi.IntegrationTests
                 ""upsert"": false
             }} ] }}";
 
-            var response = await client.PostAsync($"/{Constants.DatabaseName}/{collectionName}/update", body);
+            var response = await client.PostAsync(UrlBuilder.Build(collectionName, "update"), body);
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var actualItems = await _mongoHelper.LoadDocumentsAsync<DataModel>(
@@ -51,7 +51,7 @@ namespace Mongo.RestApi.IntegrationTests
                 ""u"": {{ ""Name"": ""new_name"", ""Array"": [ ""array_item"" ] }}
             }} ] }}";
 
-            var response = await client.PostAsync($"/{Constants.DatabaseName}/{collectionName}/update", body);
+            var response = await client.PostAsync(UrlBuilder.Build(collectionName, "update"), body);
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             existingItems[1].Name = "new_name";
@@ -75,7 +75,7 @@ namespace Mongo.RestApi.IntegrationTests
                 ""u"": {{ ""$push"": {{ ""Array"": ""new_array_item"" }} }}
             }} ] }}";
 
-            var response = await client.PostAsync($"/{Constants.DatabaseName}/{collectionName}/update", body);
+            var response = await client.PostAsync(UrlBuilder.Build(collectionName, "update"), body);
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             existingItems[1].Array = existingItems[1].Array!.Concat(new[] { "new_array_item" }).ToArray();
@@ -99,7 +99,7 @@ namespace Mongo.RestApi.IntegrationTests
                 ""upsert"": true
             }} ] }}";
 
-            var response = await client.PostAsync($"/{Constants.DatabaseName}/{collectionName}/update", body);
+            var response = await client.PostAsync(UrlBuilder.Build(collectionName, "update"), body);
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var expectedNewItem = new DataModel
@@ -128,7 +128,7 @@ namespace Mongo.RestApi.IntegrationTests
                 ""multi"": true
             }} ] }}";
 
-            var response = await client.PostAsync($"/{Constants.DatabaseName}/{collectionName}/update", body);
+            var response = await client.PostAsync(UrlBuilder.Build(collectionName, "update"), body);
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             foreach (var existingItem in existingItems)
@@ -140,6 +140,23 @@ namespace Mongo.RestApi.IntegrationTests
                 collectionName);
             actualItems.Should().NotBeNull();
             actualItems.OrderBy(x => x._id).Should().BeEquivalentTo(existingItems.OrderBy(x => x._id));
+        }
+
+        [Theory, ModelCustomization]
+        public async Task Update_Should_Return400_If_ConnectionNameIsUnknown(
+            string connectionName,
+            string collectionName,
+            HttpClient client)
+        {
+            var body = @$"{{ ""updates"": [ {{
+                ""q"": {{ }},
+                ""u"": {{ ""_id"": 123 }},
+                ""upsert"": true
+            }} ] }}";
+
+            var response = await client.PostAsync($"{connectionName}/{Constants.DatabaseName}/{collectionName}/update", body);
+
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
         public void Dispose()
