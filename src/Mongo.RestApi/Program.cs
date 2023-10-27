@@ -1,9 +1,16 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Hosting.WindowsServices;
 using Microsoft.OpenApi.Models;
 using Mongo.RestApi.Database;
 using Mongo.RestApi.ErrorHandling;
 using System.Text.Json.Serialization;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    Args = args,
+    ContentRootPath = WindowsServiceHelpers.IsWindowsService() ? AppContext.BaseDirectory : default,
+    ApplicationName = "Mongo.RestApi"
+});
 
 builder.Services.AddRouting();
 builder.Services.AddControllers(options =>
@@ -23,6 +30,15 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Mongo REST Api", Version = "v1" });
 });
+
+builder.Host
+    .UseWindowsService()
+    .ConfigureAppConfiguration(ctx =>
+    {
+        ctx
+            .AddEnvironmentVariables("MongoRestApi__")
+            .AddJsonFile("appsettings.json");
+    });
 
 var app = builder.Build();
 
