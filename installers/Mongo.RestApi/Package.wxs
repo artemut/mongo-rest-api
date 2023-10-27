@@ -14,6 +14,8 @@
            Compressed="true"
            Scope="perMachine">
 
+    <MediaTemplate EmbedCab="yes"/>
+
     <!-- Allow upgrades and prevent downgrades -->
     <MajorUpgrade DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit." />
 

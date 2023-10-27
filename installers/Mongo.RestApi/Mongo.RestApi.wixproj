@@ -1,13 +1,14 @@
 ﻿<Project Sdk="WixToolset.Sdk/4.0.2">
+  <PropertyGroup>
+    <PublishDirectory>..\..\src\Mongo.RestApi\bin\$(Configuration)\net6.0\publish</PublishDirectory>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="WixToolset.Heat" Version="4.0.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Mongo.RestApi\Mongo.RestApi.csproj" />
   </ItemGroup>
-  <PropertyGroup>
-    <PublishDirectory>..\..\src\Mongo.RestApi\bin\$(Configuration)\net6.0\publish</PublishDirectory>
-  </PropertyGroup>
   <ItemGroup>
     <HarvestDirectory Include="$(PublishDirectory)">
       <ComponentGroupName>HarvestedComponents</ComponentGroupName>
