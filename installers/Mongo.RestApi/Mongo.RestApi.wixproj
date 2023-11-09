@@ -1,0 +1,27 @@
+﻿<Project Sdk="WixToolset.Sdk/4.0.2">
+  <PropertyGroup>
+    <PublishDirectory>..\..\src\Mongo.RestApi\bin\$(Configuration)\net6.0\publish</PublishDirectory>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="WixToolset.Heat" Version="4.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Mongo.RestApi\Mongo.RestApi.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <HarvestDirectory Include="$(PublishDirectory)">
+      <ComponentGroupName>HarvestedComponents</ComponentGroupName>
+      <DirectoryRefId>INSTALLFOLDER</DirectoryRefId>
+      <SuppressCom>true</SuppressCom>
+      <SuppressFragments>true</SuppressFragments>
+      <SuppressRegistry>true</SuppressRegistry>
+      <SuppressRootDirectory>true</SuppressRootDirectory>
+      <Transforms>transform.xslt</Transforms>
+    </HarvestDirectory>
+    <BindPath Include="$(PublishDirectory)" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="transform.xslt" />
+  </ItemGroup>
+</Project>

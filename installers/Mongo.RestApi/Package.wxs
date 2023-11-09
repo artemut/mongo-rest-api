@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Define the variables in "$(var.*) expressions" -->
+<?define Name = "Mongo.RestApi" ?>
+<?define Manufacturer = "artemut" ?>
+<?define Version = "1.0.0.0" ?>
+<?define UpgradeCode = "801113C1-763C-423A-9A21-40D3019A2944" ?>
+
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package Name="$(Name)"
+           Manufacturer="$(Manufacturer)"
+           Version="$(Version)"
+           UpgradeCode="$(var.UpgradeCode)"
+           Compressed="true"
+           Scope="perMachine">
+
+    <MediaTemplate EmbedCab="yes"/>
+
+    <!-- Allow upgrades and prevent downgrades -->
+    <MajorUpgrade DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit." />
+
+    <!-- Define the directory structure -->
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <!-- Create a folder inside program files -->
+      <Directory Id="ROOTDIRECTORY" Name="$(var.Manufacturer)">
+        <!-- Create a folder within the parent folder given the name -->
+        <Directory Id="INSTALLFOLDER" Name="$(Name)" />
+      </Directory>
+    </StandardDirectory>
+
+    <!-- The files inside this DirectoryRef are linked to the Mongo.RestApi directory via INSTALLFOLDER -->
+    <DirectoryRef Id="INSTALLFOLDER">
+
+      <!-- Create a single component for the service -->
+      <Component Id="ServiceExecutable" Bitness="always64" Guid="2DC34221-3EFF-40C4-AD23-CD605D72CF78">
+        <File Id="Mongo.RestApi.exe" Name="Mongo.RestApi.exe" KeyPath="true" />
+        <RemoveFile Id="ALLFILES" Name="*.*" On="both" />
+        <ServiceInstall Id="ServiceInstaller"
+                        Type="ownProcess"
+                        Name="Mongo.RestApi"
+                        DisplayName="$(Name)"
+                        Description="Provides REST interface for Mongo"
+                        Start="auto"
+                        ErrorControl="normal" />
+        <ServiceControl Id="StartService"
+                        Start="install"
+                        Stop="both"
+                        Remove="uninstall"
+                        Name="Mongo.RestApi"
+                        Wait="true" />
+      </Component>
+    </DirectoryRef>
+
+    <!-- Install the service -->
+    <Feature Id="Service" Title="Mongo.RestApi Setup" Level="1">
+      <ComponentGroupRef Id="HarvestedComponents" />
+      <ComponentRef Id="ServiceExecutable" />
+    </Feature>
+
+  </Package>
+</Wix>
