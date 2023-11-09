@@ -17,7 +17,6 @@ namespace Mongo.RestApi.IntegrationTests
 
         [Theory, ModelCustomization]
         public async Task Find_Should_ReturnEmptyArray_If_NoData(
-            string databaseName,
             string collectionName,
             HttpClient client)
         {
