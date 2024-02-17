@@ -394,7 +394,7 @@ FodyWeavers.xsd
 *.msm
 *.msp
 
-!installers/Mongo.RestApi/Mongo.RestApi_1.0.msi
+!installers/Mongo.RestApi/Mongo.RestApi_*.msi
 
 # JetBrains Rider
 *.sln.iml

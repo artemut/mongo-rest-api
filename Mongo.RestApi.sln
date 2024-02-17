@@ -13,6 +13,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "installers", "installers", 
 EndProject
 Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "Mongo.RestApi", "installers\Mongo.RestApi\Mongo.RestApi.wixproj", "{9665AF4C-3D30-4D00-B9FA-309EB8149093}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_solution_items", "_solution_items", "{2E73B114-C28B-478E-B229-E56215332DED}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

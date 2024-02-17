@@ -29,7 +29,7 @@ Now, service is running on port 5600: http://localhost:5600/
 
 ### Option 2. Use MSI installer (Windows only)
 
-You can download the installer [Mongo.RestApi_1.0.msi](installers/Mongo.RestApi/Mongo.RestApi_1.0.msi) and run it on your Windows machine. It will install a windows service **Mongo.RestApi** so that the API is always running in the background on port 5600: http://localhost:5600/
+You can download the installer [Mongo.RestApi_1.1.msi](installers/Mongo.RestApi/Mongo.RestApi_1.1.msi) and run it on your Windows machine. It will install a windows service **Mongo.RestApi** so that the API is always running in the background on port 5600: http://localhost:5600/
 
 
 #### If port 5600 is already taken

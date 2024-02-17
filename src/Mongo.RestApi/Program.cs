@@ -12,6 +12,7 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
     ApplicationName = "Mongo.RestApi"
 });
 
+builder.Services.AddCors();
 builder.Services.AddRouting();
 builder.Services.AddControllers(options =>
     {
@@ -43,6 +44,12 @@ builder.Host
 var app = builder.Build();
 
 app.UseRouting();
+app.UseCors(o =>
+{
+    o.WithOrigins(app.Configuration.GetSection("AllowedOrigins").Value.Split(";"));
+    o.AllowAnyMethod();
+    o.AllowAnyHeader();
+});
 app.MapControllers();
 app.UseSwagger(options =>
 {

@@ -3,7 +3,7 @@
 <!-- Define the variables in "$(var.*) expressions" -->
 <?define Name = "Mongo.RestApi" ?>
 <?define Manufacturer = "artemut" ?>
-<?define Version = "1.0.0.0" ?>
+<?define Version = "1.1.0.0" ?>
 <?define UpgradeCode = "801113C1-763C-423A-9A21-40D3019A2944" ?>
 
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
